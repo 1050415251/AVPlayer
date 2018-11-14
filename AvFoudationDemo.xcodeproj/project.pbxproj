@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FDD01034219BBB0500F3C55F /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD01033219BBB0500F3C55F /* DataManager.swift */; };
+		FDD01036219BBB7A00F3C55F /* DataDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD01035219BBB7A00F3C55F /* DataDownloadManager.swift */; };
+		FDD01038219BBB8400F3C55F /* DataUploadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD01037219BBB8400F3C55F /* DataUploadManager.swift */; };
 		FDEFB83821991C020078BF28 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDEFB83721991C020078BF28 /* AppDelegate.swift */; };
 		FDEFB83A21991C020078BF28 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDEFB83921991C020078BF28 /* ViewController.swift */; };
 		FDEFB83D21991C020078BF28 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FDEFB83B21991C020078BF28 /* Main.storyboard */; };
@@ -23,6 +26,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FDD01033219BBB0500F3C55F /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		FDD01035219BBB7A00F3C55F /* DataDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDownloadManager.swift; sourceTree = "<group>"; };
+		FDD01037219BBB8400F3C55F /* DataUploadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataUploadManager.swift; sourceTree = "<group>"; };
 		FDEFB83421991C020078BF28 /* AvFoudationDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AvFoudationDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FDEFB83721991C020078BF28 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FDEFB83921991C020078BF28 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -51,6 +57,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FDD01039219C0A3C00F3C55F /* DownloadManager */ = {
+			isa = PBXGroup;
+			children = (
+				FDD01033219BBB0500F3C55F /* DataManager.swift */,
+				FDD01035219BBB7A00F3C55F /* DataDownloadManager.swift */,
+				FDD01037219BBB8400F3C55F /* DataUploadManager.swift */,
+			);
+			path = DownloadManager;
+			sourceTree = "<group>";
+		};
 		FDEFB82B21991C020078BF28 = {
 			isa = PBXGroup;
 			children = (
@@ -72,6 +88,7 @@
 			children = (
 				FDEFB83721991C020078BF28 /* AppDelegate.swift */,
 				FDEFB83921991C020078BF28 /* ViewController.swift */,
+				FDD01039219C0A3C00F3C55F /* DownloadManager */,
 				FDEFB84C21991C1B0078BF28 /* AVFoundationManager */,
 				FDEFB83B21991C020078BF28 /* Main.storyboard */,
 				FDEFB84121991C030078BF28 /* Assets.xcassets */,
@@ -174,8 +191,11 @@
 				FDEFB852219928D90078BF28 /* AVFoundationBottomView.swift in Sources */,
 				FDEFB85A219946A50078BF28 /* AVFoundationDownloadManager.swift in Sources */,
 				FDEFB850219925410078BF28 /* AVFoundationView.swift in Sources */,
+				FDD01036219BBB7A00F3C55F /* DataDownloadManager.swift in Sources */,
 				FDEFB8562199296D0078BF28 /* AVFoundationRightView.swift in Sources */,
+				FDD01034219BBB0500F3C55F /* DataManager.swift in Sources */,
 				FDEFB83821991C020078BF28 /* AppDelegate.swift in Sources */,
+				FDD01038219BBB8400F3C55F /* DataUploadManager.swift in Sources */,
 				FDEFB854219928E50078BF28 /* AVFoudationTopView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

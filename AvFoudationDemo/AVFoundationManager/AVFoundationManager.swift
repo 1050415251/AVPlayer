@@ -8,6 +8,7 @@
 
 import Foundation
 import AVFoundation
+import UIKit
 
 //typedef struct{
 //    CMTimeValue    value;     // 帧数
@@ -27,7 +28,7 @@ class AVFoundationManager: NSObject {
     fileprivate var playeritem: AVPlayerItem?
     fileprivate var playprogressObserVer: Any?
     /// 下载管理
-    fileprivate let downloadmanager =  AVFoundationDownloadManager()
+    fileprivate let downloadutil =  AVFoundationDownloadUtil()
 
     ///总前时间戳
     private var maxtimestamp: TimeInterval? {
@@ -53,8 +54,12 @@ class AVFoundationManager: NSObject {
         }set {
             if let stamp = newValue {
                 let targetTime = CMTime.init(value: CMTimeValue(stamp), timescale: 1)
-                player?.seek(to: targetTime)
-                player?.play()
+                player?.seek(to: targetTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero, completionHandler: { [weak self] finish in
+                    if finish {
+                        self?.player?.play()
+                    }
+                })
+
             }
         }
     }
@@ -93,13 +98,13 @@ class AVFoundationManager: NSObject {
     /// - Parameter timestamp: 如果传递时间戳则从
     @discardableResult
     public func play(url: URL,_ timestamp: TimeInterval?) -> AVPlayer {
-        removeplayer()
+        removeplayer() /// 移除对上一个视频的所有i监听
 
         var components = URLComponents.init(url: url, resolvingAgainstBaseURL: false)
         components?.scheme = SCHEME
 
         let asset = AVURLAsset.init(url: components!.url!)
-        asset.resourceLoader.setDelegate(downloadmanager, queue: DispatchQueue.main)
+        asset.resourceLoader.setDelegate(downloadutil, queue: DispatchQueue.main)
 
         playeritem = AVPlayerItem.init(asset: asset)
         // TODO: 添加监听
@@ -114,7 +119,7 @@ class AVFoundationManager: NSObject {
             player?.replaceCurrentItem(with: playeritem)
         }
 
-
+    
         playprogressObserVer = self.player?.addPeriodicTimeObserver(forInterval: CMTime.init(value: 1, timescale: 1), queue: DispatchQueue.main, using: { [weak self] (time) in
             guard let _ = self else { return }
             if self?.player?.currentItem?.status == .readyToPlay {
@@ -185,7 +190,8 @@ class AVFoundationManager: NSObject {
             case .unknown:
                 debugPrint("未知")
             case .failed:
-                debugPrint("发生错误")
+                break
+               // debugPrint("发生错误")
             case .readyToPlay:
                 self.play()
 
@@ -210,15 +216,16 @@ class AVFoundationManager: NSObject {
     }
 
     // 计算当前缓冲进度
-    func avalableDurationWithplayerItem() -> TimeInterval{
-
+    private func avalableDurationWithplayerItem() -> TimeInterval{
         guard let loadedTimeRanges = self.player?.currentItem?.loadedTimeRanges,let first = loadedTimeRanges.first else {fatalError()}
         let timeRange = first.timeRangeValue
-        let startSeconds = CMTimeGetSeconds(timeRange.start)
+        let startSeconds =  CMTimeGetSeconds(timeRange.start)
         let durationSecound = CMTimeGetSeconds(timeRange.duration)
         let result = startSeconds + durationSecound
         return result
     }
+
+
 
     deinit {
         removeplayer()
@@ -228,4 +235,29 @@ class AVFoundationManager: NSObject {
 }
 
 
+extension AVFoundationManager {
 
+    ///获取视频某个时间的图片
+    class func getdataimg(url: URL,timestamp: TimeInterval,complete: ((UIImage?)->Void)?) {
+        DispatchQueue.global().async {
+            do {
+                //生成视频截图
+                let generator = AVAssetImageGenerator (asset: AVAsset.init(url: url))
+                ///按视频的正确方向截图
+                generator.appliesPreferredTrackTransform = true
+                let targetTime = CMTime.init(value: CMTimeValue(timestamp), timescale: 1)
+                var actualTime = CMTime.init(value: 0, timescale: 0)
+                let imageRef: CGImage = try generator.copyCGImage(at: targetTime, actualTime: &actualTime)
+                let img = UIImage (cgImage: imageRef)
+                DispatchQueue.main.async {
+                    complete?(img)
+                }
+            }catch {
+                DispatchQueue.main.async {
+                    complete?(nil)
+                }
+            }
+        }
+    }
+
+}

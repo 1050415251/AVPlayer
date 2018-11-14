@@ -44,6 +44,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.saveContext()
     }
 
+    /// 后台线程下载
+    func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
+
+    }
+
     // MARK: - Core Data stack
 
     lazy var persistentContainer: NSPersistentContainer = {

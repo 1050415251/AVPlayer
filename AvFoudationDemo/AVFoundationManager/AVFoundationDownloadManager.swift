@@ -9,20 +9,16 @@
 import Foundation
 import AVFoundation
 
-class  AVFoundationDownloadManager: NSObject {
+class  AVFoundationDownloadUtil: NSObject {
 
     fileprivate var requestlist: [AVAssetResourceLoadingRequest] = []
+   
+    fileprivate lazy var datamanager: DataManager = DataManager.newinstance(dataType: DataType.Download)
+
+} 
 
 
-}
-
-
-extension AVFoundationDownloadManager: AVAssetResourceLoaderDelegate {
-
-
-
-
-
+extension AVFoundationDownloadUtil: AVAssetResourceLoaderDelegate {
 
     func resourceLoader(_ resourceLoader: AVAssetResourceLoader, didCancel loadingRequest: AVAssetResourceLoadingRequest) {
 
@@ -39,13 +35,14 @@ extension AVFoundationDownloadManager: AVAssetResourceLoaderDelegate {
     /// //在系统不知道如何处理URLAsset资源时回调回调
     func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
 
-        let recourseurl = loadingRequest.request.url
-        if recourseurl?.scheme == SCHEME {
-            //判断当前的URL网络请求是否已经被加载过了，如果缓存中里面有URL对应的网络加载器(自己封装，也可以直接使用NSURLRequest)，则取出来添加请求，每一个URL对应一个网络加载器，loader的实现接下来会说明
-
+        if let recourseurl = loadingRequest.request.url,recourseurl.scheme == SCHEME {
+            var components = URLComponents.init(url: recourseurl, resolvingAgainstBaseURL: false)
+            components?.scheme = "http"
+            datamanager.taskstart(url: components!.url!)
+            return true
         }
-
         return false
     }
 
 }
+
